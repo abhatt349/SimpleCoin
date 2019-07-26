@@ -101,12 +101,14 @@ def generate_ECDSA_keys():
     private_key = sk.to_string().hex() #convert your private key to hex
     vk = sk.get_verifying_key() #this is your verification key (public key)
     public_key = vk.to_string().hex()
+
     #we are going to encode the public key to make it shorter
     public_key = base64.b64encode(bytes.fromhex(public_key))
 
     filename = input("Write the name of your new address: ") + ".txt"
     with open(filename, "w") as f:
-        f.write("Private key: {0}\nWallet address / Public key: {1}".format(private_key, public_key.decode()))
+        f.write("Private key: {0}\nWallet address: {1}".format(private_key, public_key.decode()))
+        f.write("\nPublic key: {0}".format(vk.to_string().hex()))
     print("Your new address and private key are now in the file {0}".format(filename))
 
 def sign_ECDSA_msg(private_key):
