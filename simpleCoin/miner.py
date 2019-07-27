@@ -28,6 +28,7 @@ class Block:
             timestamp (int): Block creation timestamp.
             data (str): Data to be sent.
             previous_hash(str): String representing previous block unique hash.
+            difficulty(int): Current network difficulty
             hash(str): Current block unique hash.
 
         """
@@ -35,6 +36,7 @@ class Block:
         self.timestamp = timestamp
         self.data = data
         self.previous_hash = previous_hash
+        self.difficulty = self.current_difficulty()
         self.hash = self.hash_block()
 
     def hash_block(self):
@@ -42,6 +44,19 @@ class Block:
         sha = hashlib.sha256()
         sha.update((str(self.index) + str(self.timestamp) + str(self.data) + str(self.previous_hash)).encode('utf-8'))
         return sha.hexdigest()
+
+    def current_difficulty(self):
+        """Calculate the current difficulty to keep block generation at 10 minutes"""
+        # Start the difficulty at 1
+        if self.index > 0:
+            last_block = next(block for block in BLOCKCHAIN if block.hash == self.previous_hash)
+            elapsed = self.timestamp - last_block.timestamp
+            if int(elapsed) < 10:
+                return last_block.difficulty + 1
+            else:
+                return last_block.difficulty - 1
+        else:
+            return 1
 
 
 def create_genesis_block():
@@ -66,13 +81,21 @@ NODE_PENDING_TRANSACTIONS = []
 
 
 def proof_of_work(last_proof, blockchain):
+    """ Requires CPUs to compute a hash that mets the difficulty requirement."""
+    nonce = 1
+    start_time = time.time()
+
+    sha = hashlib.sha256()
+    sha.update((str(start_time) + str(nonce) + str(MINER_ADDRESS)).encode('utf-8'))
+    canidate_proof = sha.hexdigest()
+
     # Creates a variable that we will use to find our next proof of work
-    incrementer = last_proof + 1
+    #incrementer = last_proof + 1
     # Keep incrementing the incrementer until it's equal to a number divisible by 9
     # and the proof of work of the previous block in the chain
-    start_time = time.time()
-    while not (incrementer % 7919 == 0 and incrementer % last_proof == 0):
-        incrementer += 1
+    print("Difficulty: ", blockchain[-1].difficulty)
+    while not canidate_proof.startswith('0' * blockchain[-1].difficulty):   # (incrementer % 7919 == 0 and incrementer % last_proof == 0):
+        #incrementer += 1
         # Check if any node found the solution every 60 seconds
         if int((time.time()-start_time) % 60) == 0:
             # If any other node got the proof, stop searching
@@ -80,9 +103,18 @@ def proof_of_work(last_proof, blockchain):
             if new_blockchain:
                 # (False: another node got proof first, new blockchain)
                 return False, new_blockchain
-    # Once that number is found, we can return it as a proof of our work
-    return incrementer, blockchain
 
+        nonce += 1
+        sha.update((str(start_time) + str(nonce) + str(MINER_ADDRESS)).encode('utf-8'))
+        canidate_proof = sha.hexdigest()
+
+    # Once that number is found, we can return it as a proof of our work
+    print("Proof: ", canidate_proof)
+    return {"time": start_time, "nonce": nonce, "miner": MINER_ADDRESS, "proof": canidate_proof}, blockchain
+
+
+def get_block_template():
+    return
 
 def mine(a, blockchain, node_pending_transactions):
     BLOCKCHAIN = blockchain
