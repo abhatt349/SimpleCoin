@@ -10,4 +10,4 @@ MINER_NODE_URL = "http://localhost:5000"
 
 # Store the url data of every other node in the network
 # so that we can communicate with them
-PEER_NODES = []
+PEER_NODES = ["https://192.168.1.11:5000"]
