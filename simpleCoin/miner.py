@@ -155,9 +155,15 @@ def mine(a, blockchain, node_pending_transactions):
                 "proof-of-work": proof[0],
                 "transactions": list(NODE_PENDING_TRANSACTIONS)
             }
-            new_block_index = last_block.index + 1
+
             new_block_timestamp = time.time()
-            last_block_hash = last_block.hash
+
+            if isinstance(last_block, Block):
+                last_block_hash = last_block.hash
+                new_block_index = last_block.index + 1
+            else:
+                last_block_hash = last_block["hash"]
+                new_block_index = last_block["index"] + 1
             # Empty transaction list
             NODE_PENDING_TRANSACTIONS = []
             # Now create the new block
