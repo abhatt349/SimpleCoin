@@ -126,7 +126,7 @@ def mine(a, blockchain, node_pending_transactions):
         """
         # Get the last proof of work
         last_block = BLOCKCHAIN[-1]
-        if isinstance(last_block, Block)
+        if isinstance(last_block, Block):
             last_proof = last_block.data['proof-of-work']
         else:
             last_proof = last_block["proof-of-work"]
