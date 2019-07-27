@@ -126,10 +126,7 @@ def mine(a, blockchain, node_pending_transactions):
         """
         # Get the last proof of work
         last_block = BLOCKCHAIN[-1]
-        if isinstance(last_block, Block)
-            last_proof = last_block.data['proof-of-work']
-        else:
-            last_proof = last_block["proof-of-work"]
+        last_proof = last_block.data['proof-of-work']
         # Find the proof of work for the current block being mined
         # Note: The program will hang here until a new proof of work is found
         proof = proof_of_work(last_proof, BLOCKCHAIN)
@@ -297,8 +294,8 @@ if __name__ == '__main__':
     welcome_msg()
     # Start mining
     a, b = Pipe()
-    p1 = Process(target=mine, args=(a, BLOCKCHAIN, NODE_PENDING_TRANSACTIONS))
-    p1.start()
+    # p1 = Process(target=mine, args=(a, BLOCKCHAIN, NODE_PENDING_TRANSACTIONS))
+    # p1.start()
     # Start server to receive transactions
     p2 = Process(target=node.run(host='0.0.0.0'), args=b)
     p2.start()
