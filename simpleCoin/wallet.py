@@ -26,12 +26,12 @@ import ecdsa
 
 def wallet():
     response = None
-    while response not in ["1", "2", "3"]:
+    while response not in ["1\n", "2\n", "3\n"]:
         response = input("""What do you want to do?
         1. Generate new wallet
         2. Send coins to another wallet
         3. Check transactions\n""")
-    if response == "1":
+    if response == "1\n":
         # Generate new wallet
         print("""=========================================\n
 IMPORTANT: save this credentials or you won't be able to recover your wallet\n

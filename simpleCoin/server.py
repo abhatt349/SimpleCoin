@@ -12,6 +12,10 @@ import ecdsa
  node = Flask(__name__)
 
 
+ # Node's blockchain copy
+global BLOCKCHAIN = [create_genesis_block()]
+
+
  class Block:
     def __init__(self, index, timestamp, data, previous_hash):
         """Returns a new Block object. Each block is "chained" to its previous
@@ -48,7 +52,7 @@ import ecdsa
         if self.index > 0:
             last_block = next(block for block in BLOCKCHAIN if block.hash == self.previous_hash)
             elapsed = self.timestamp - last_block.timestamp
-            if int(elapsed) < 10:
+            if int(elapsed) < 15:
                 return last_block.difficulty + 1
             else:
                 return last_block.difficulty - 1
@@ -66,8 +70,6 @@ import ecdsa
         "0")
 
 
- # Node's blockchain copy
-BLOCKCHAIN = [create_genesis_block()]
 
  """ Stores the transactions that this node has in a list.
 If the node you sent the transaction adds a block
@@ -89,7 +91,7 @@ NODE_PENDING_TRANSACTIONS = []
      # Creates a variable that we will use to find our next proof of work
     #incrementer = last_proof + 1
     # Keep incrementing the incrementer until it's equal to a number divisible by 9
-    # and the proof of work of the previous block in the chain	
+    # and the proof of work of the previous block in the chain
     print("Difficulty: ", blockchain[-1].difficulty)
     while not canidate_proof.startswith('0' * blockchain[-1].difficulty):   # (incrementer % 7919 == 0 and incrementer % last_proof == 0):
         #incrementer += 1
