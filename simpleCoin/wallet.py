@@ -26,18 +26,17 @@ import ecdsa
 
 def wallet():
     response = None
-    while response not in ["1\n", "2\n", "3\n"]:
-        response = input("""What do you want to do?
-        1. Generate new wallet
-        2. Send coins to another wallet
-        3. Check transactions\n""")
-    if response == "1\nl":
+    while response not in [1, 2, 3]:
+        response = input("""What do you want to do?\n1. Generate new wallet\n2. Send coins to another wallet\n3. Check transactions\n""")
+
+	print(response)
+    if response == 1:
         # Generate new wallet
         print("""=========================================\n
 IMPORTANT: save this credentials or you won't be able to recover your wallet\n
 =========================================\n""")
         generate_ECDSA_keys()
-    elif response == "2":
+    elif response == 2:
         addr_from = input("From: introduce your wallet address (public key)\n")
         private_key = input("Introduce your private key\n")
         addr_to = input("To: introduce destination wallet address\n")
