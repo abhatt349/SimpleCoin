@@ -31,7 +31,7 @@ def wallet():
         1. Generate new wallet
         2. Send coins to another wallet
         3. Check transactions\n""")
-    if response == "1\n":
+    if response == "1\nl":
         # Generate new wallet
         print("""=========================================\n
 IMPORTANT: save this credentials or you won't be able to recover your wallet\n
